@@ -1,0 +1,36 @@
+<html>
+<head>
+	<title>Perf</title>
+</head>
+<body>
+	<div>
+		<select name="select" id="dataset">
+			<option value="data1">Dataset1</option> 
+			<option value="data2">Dataset2</option>
+		</select>
+	</div>
+	<div id="display"></div>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.10/d3.min.js"></script>
+	<script type="text/javascript">
+		function update(file){
+			var name = file || this.options[this.selectedIndex].value;
+			var path = name + '.json'; 
+			d3.select('div#display').selectAll('div.item').remove();
+			d3.json(path, function(error, json) {
+			  	if (error) return console.warn(error);
+			  	data = json;
+			  	var divs = d3.select('div#display').selectAll('div.item').data(data);
+			  	divs.enter()
+			  	  .append('div')
+			      .classed('item', true)
+			      .text(function(d){
+			  		return d.name;
+			  	  });
+			});
+		}
+		// when the input range changes update the circle 
+		d3.select("#dataset").on("change", update);
+		update('data1');
+	</script>
+</body>
+</html>
